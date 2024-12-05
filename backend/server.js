@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import MongoStore from "connect-mongo";
 import session from "express-session";
 
 import passport from "passport";
@@ -49,6 +50,9 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+    }),
     cookie: {
       secure: process.env.NODE_ENV === "production",
       httpOnly: true,
@@ -57,6 +61,7 @@ app.use(
     },
   })
 );
+
 
 app.use(passport.initialize());
 app.use(passport.session());
