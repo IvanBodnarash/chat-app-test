@@ -1,0 +1,31 @@
+.chat-search {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    background-image: url("https://img.icons8.com/?size=100&id=132&format=png&color=000000");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    pointer-events: none;
+}
+
+.chat-search-input {
+    padding: 10px 12px 10px 35px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    width: 100%;
+    outline: none;
+}

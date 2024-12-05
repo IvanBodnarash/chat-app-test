@@ -1,0 +1,74 @@
+.chat-list-item {
+    padding: 20px 20px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.chat-list-container {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.chat-list-item.active {
+    background-color: #f0f8ff;
+}
+
+.chat-list-item-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.chat-list-item-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chat-list-item-container span {
+    font-size: 16px;
+}
+
+.chat-list-edit-buttons {
+    padding: 0 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.edit-button,
+.save-button,
+.cancel-button {
+    color: #707070;
+    border: solid 1px #d0d0d0;
+}
+
+.delete-button {
+    color: #707070;
+    background-color: #ffa9a9bc;
+    border: solid 1px #d0d0d0;
+}
+
+.chat-list-item-container img {
+    opacity: 60%;
+    width: 40px;
+}
+
+.edit-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: fit-content;
+}
+
+.edit-form input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    width: 200px;
+    color: #5a5959;
+    outline: none;
+}
