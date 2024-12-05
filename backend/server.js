@@ -4,6 +4,7 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import session from "express-session";
+
 import passport from "passport";
 import { connect } from "mongoose";
 import cors from "cors";
@@ -17,8 +18,8 @@ import Message from "./models/Message.js";
 import { isAuthenticated } from "./middleware/authMiddleware.js";
 
 import fetch from "node-fetch";
-import https from "https";
-const agent = new https.Agent({ rejectUnauthorized: false });
+// import https from "https";
+// const agent = new https.Agent({ rejectUnauthorized: false });
 
 dotenv.config();
 
@@ -27,7 +28,7 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
     methods: ["GET", "POST"],
   },
 });
@@ -38,7 +39,7 @@ let isAutoMessagesRunning = false;
 // Middlewares
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
     // methods: ["GET", "POST"],
     credentials: true,
   })
@@ -85,9 +86,7 @@ io.on("connection", (socket) => {
         const randomChat = chats[Math.floor(Math.random() * chats.length)];
 
         // Get random quote from Quotable
-        const quoteRsponse = await fetch("https://api.quotable.io/random", {
-          agent,
-        });
+        const quoteRsponse = await fetch("https://api.quotable.io/random");
         const quote = await quoteRsponse.json();
 
         const randomMessage = `Auto-generated message: "${quote.content}" - ${quote.author}`;

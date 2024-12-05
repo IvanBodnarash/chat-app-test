@@ -8,7 +8,8 @@ import ChatSearch from "./components/ChatSearch";
 
 import Toast from "./components/Toast";
 
-const socket = io("http://localhost:5001");
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const socket = io(BACKEND_URL);
 
 const App = () => {
   const [activeChat, setActiveChat] = useState(null);
@@ -25,14 +26,14 @@ const App = () => {
   // Auth check
   useEffect(() => {
     axios
-      .get("http://localhost:5001/auth/profile", { withCredentials: true })
+      .get(`${BACKEND_URL}/auth/profile`, { withCredentials: true })
       .then((res) => setUser(res.data))
       .catch((error) => console.error("Error fetching user:", error));
   }, []);
 
   const handleLogout = () => {
     axios
-      .get("http://localhost:5001/auth/logout", { withCredentials: true })
+      .get(`${BACKEND_URL}/auth/logout`, { withCredentials: true })
       .then(() => {
         setUser(null);
       })
@@ -46,7 +47,7 @@ const App = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5001/chats", { withCredentials: true })
+      .get(`${BACKEND_URL}/chats`, { withCredentials: true })
       .then((res) => {
         setChats(res.data);
         setFilteredChats(res.data);
@@ -149,7 +150,7 @@ const App = () => {
                 </div>
               </>
             ) : (
-              <a href="http://localhost:5001/auth/google">
+              <a href={`${BACKEND_URL}/auth/google`}>
                 <button className="google-login-button">
                   <img
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"

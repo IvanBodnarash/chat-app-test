@@ -4,7 +4,8 @@ import { io } from "socket.io-client";
 
 import "./ChatList.css";
 
-const socket = io("http://localhost:5001");
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const socket = io(BACKEND_URL);
 
 const ChatList = ({
   chats,
@@ -19,7 +20,7 @@ const ChatList = ({
 
   useEffect(() => {
     axios
-      .get("http://localhost:5001/chats", { withCredentials: true })
+      .get(`${BACKEND_URL}/chats`, { withCredentials: true })
       .then((res) => setChats(res.data))
       .catch((err) => console.log("Error fetching chats", err));
 
@@ -72,7 +73,7 @@ const ChatList = ({
   const handleUpdate = () => {
     axios
       .put(
-        `http://localhost:5001/chats/${editingChat}`,
+        `${BACKEND_URL}/chats/${editingChat}`,
         {
           firstName: editFirstName,
           lastName: editLastName,
@@ -108,7 +109,7 @@ const ChatList = ({
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this chat?")) {
       axios
-        .delete(`http://localhost:5001/chats/${id}`, { withCredentials: true })
+        .delete(`${BACKEND_URL}/chats/${id}`, { withCredentials: true })
         .then(() => {
           setChats((prevChats) => prevChats.filter((chat) => chat._id !== id));
           setFilteredChats((prevChats) =>

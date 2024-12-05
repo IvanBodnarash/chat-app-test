@@ -4,7 +4,9 @@ import { io } from "socket.io-client";
 
 import "./ChatWindow.css";
 
-const socket = io("http://localhost:5001", { transports: ["websocket"] });
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const socket = io(BACKEND_URL);
+// const socket = io("http://localhost:5001", { transports: ["websocket"] });
 
 const ChatWindow = ({ activeChat }) => {
   const [messages, setMessages] = useState([]);
@@ -22,7 +24,7 @@ const ChatWindow = ({ activeChat }) => {
   useEffect(() => {
     if (activeChat) {
       axios
-        .get(`http://localhost:5001/messages?chatId=${activeChat._id}`, {
+        .get(`${BACKEND_URL}/messages?chatId=${activeChat._id}`, {
           withCredentials: true,
         })
         .then((res) => {
@@ -45,14 +47,6 @@ const ChatWindow = ({ activeChat }) => {
         }
         return prevMessages;
       });
-
-      // if (message.chatId !== activeChat?._id && message.isBot) {
-      //   setToast({
-      //     text: message.text,
-      //     firstName: message.chatFirstName,
-      //     lastName: message.chatLastName,
-      //   });
-      // }
       if (message.chatId === activeChat?._id) {
         scrollToBottom();
       }
@@ -94,7 +88,7 @@ const ChatWindow = ({ activeChat }) => {
 
     axios
       .post(
-        "http://localhost:5001/messages",
+        `${BACKEND_URL}/messages`,
         {
           chatId: activeChat._id,
           text,
@@ -116,7 +110,7 @@ const ChatWindow = ({ activeChat }) => {
     if (editingMessageId) {
       axios
         .put(
-          `http://localhost:5001/messages/${editingMessageId}`,
+          `${BACKEND_URL}/messages/${editingMessageId}`,
           {
             text: editingText,
           },
@@ -132,7 +126,7 @@ const ChatWindow = ({ activeChat }) => {
 
   const handleDeleteMessage = (message) => {
     axios
-      .delete(`http://localhost:5001/messages/${message._id}`, {
+      .delete(`${BACKEND_URL}/messages/${message._id}`, {
         withCredentials: true,
       })
       .then(() => {

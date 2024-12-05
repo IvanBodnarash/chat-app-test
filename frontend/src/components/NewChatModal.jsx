@@ -3,6 +3,8 @@ import axios from "axios";
 
 import "./NewChatModal.css";
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const NewChatModal = ({ closeModal, onChatCreated }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -23,7 +25,7 @@ const NewChatModal = ({ closeModal, onChatCreated }) => {
 
     axios
       .post(
-        "http://localhost:5001/chats",
+        `${BACKEND_URL}/chats`,
         { firstName, lastName },
         { withCredentials: true }
       )
