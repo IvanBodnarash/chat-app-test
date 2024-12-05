@@ -28,7 +28,7 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: process.env.CLIENT_URL,
     methods: ["GET", "POST"],
   },
 });
@@ -39,8 +39,7 @@ let isAutoMessagesRunning = false;
 // Middlewares
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
-    // methods: ["GET", "POST"],
+    origin: process.env.CLIENT_URL,
     credentials: true,
   })
 );
