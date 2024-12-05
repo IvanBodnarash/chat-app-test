@@ -50,7 +50,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
       httpOnly: true,
       sameSite: "strict",
       maxAge: 24 * 60 * 60 * 1000,
@@ -152,6 +152,15 @@ connect(process.env.MONGODB_URI)
   });
 
 // console.log("MONGODB_URI:", process.env.MONGODB_URI);
+
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception: ", err);
+  process.exit(1); // Або використовуйте механізм перезапуску
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection: ", reason);
+});
 
 // Start the server
 const PORT = process.env.PORT || 5001;
