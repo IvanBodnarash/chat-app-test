@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import MongoStore from "connect-mongo";
 import session from "express-session";
 
 import passport from "passport";
@@ -19,28 +18,18 @@ import Message from "./models/Message.js";
 import { isAuthenticated } from "./middleware/authMiddleware.js";
 
 import fetch from "node-fetch";
-// import https from "https";
-// const agent = new https.Agent({ rejectUnauthorized: false });
+import https from "https";
+const agent = new https.Agent({ rejectUnauthorized: false });
 
 dotenv.config();
 
 const app = express();
 
-if (process.env.NODE_ENV === "production") {
-  app.use((req, res, next) => {
-    if (req.headers["x-forwarded-proto"] !== "https") {
-      return res.redirect(`https://${req.headers.host}${req.url}`);
-    }
-    next();
-  });
-}
-
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL,
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"],
-    credentials: true,
   },
 });
 
@@ -50,7 +39,8 @@ let isAutoMessagesRunning = false;
 // Middlewares
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: "http://localhost:5173",
+    // methods: ["GET", "POST"],
     credentials: true,
   })
 );
@@ -59,16 +49,10 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URI,
-    }),
+    saveUninitialized: true,
     cookie: {
-      secure: process.env.NODE_ENV === "production",
-      httpsOnly: true,
-      // sameSite: "strict",
-      maxAge: 24 * 60 * 60 * 1000,
-    },
+      secure: false,
+    }
   })
 );
 
@@ -102,7 +86,9 @@ io.on("connection", (socket) => {
         const randomChat = chats[Math.floor(Math.random() * chats.length)];
 
         // Get random quote from Quotable
-        const quoteRsponse = await fetch("https://api.quotable.io/random");
+        const quoteRsponse = await fetch("https://api.quotable.io/random", {
+          agent,
+        });
         const quote = await quoteRsponse.json();
 
         const randomMessage = `Auto-generated message: "${quote.content}" - ${quote.author}`;
@@ -166,15 +152,6 @@ connect(process.env.MONGODB_URI)
   });
 
 // console.log("MONGODB_URI:", process.env.MONGODB_URI);
-
-process.on("uncaughtException", (err) => {
-  console.error("Uncaught Exception: ", err);
-  process.exit(1); // Або використовуйте механізм перезапуску
-});
-
-process.on("unhandledRejection", (reason, promise) => {
-  console.error("Unhandled Rejection: ", reason);
-});
 
 // Start the server
 const PORT = process.env.PORT || 5001;

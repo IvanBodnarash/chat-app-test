@@ -4,9 +4,9 @@ import { io } from "socket.io-client";
 
 import "./ChatWindow.css";
 
-const BACKEND_URL = "https://chat-app-test-cllw.onrender.com";
-const socket = io(BACKEND_URL, { transports: ["websocket"] });
-// const socket = io("http://localhost:5001", { transports: ["websocket"] });
+const socket = io(`${import.meta.env.VITE_BACKEND_URL}`, {
+  transports: ["websocket"],
+});
 
 const ChatWindow = ({ activeChat }) => {
   const [messages, setMessages] = useState([]);
@@ -24,9 +24,14 @@ const ChatWindow = ({ activeChat }) => {
   useEffect(() => {
     if (activeChat) {
       axios
-        .get(`${BACKEND_URL}/messages?chatId=${activeChat._id}`, {
-          withCredentials: true,
-        })
+        .get(
+          `${import.meta.env.VITE_BACKEND_URL}/messages?chatId=${
+            activeChat._id
+          }`,
+          {
+            withCredentials: true,
+          }
+        )
         .then((res) => {
           setMessages((prevMessages) => ({
             ...prevMessages,
@@ -47,6 +52,7 @@ const ChatWindow = ({ activeChat }) => {
         }
         return prevMessages;
       });
+
       if (message.chatId === activeChat?._id) {
         scrollToBottom();
       }
@@ -88,7 +94,7 @@ const ChatWindow = ({ activeChat }) => {
 
     axios
       .post(
-        `${BACKEND_URL}/messages`,
+        `${import.meta.env.VITE_BACKEND_URL}/messages`,
         {
           chatId: activeChat._id,
           text,
@@ -110,7 +116,7 @@ const ChatWindow = ({ activeChat }) => {
     if (editingMessageId) {
       axios
         .put(
-          `${BACKEND_URL}/messages/${editingMessageId}`,
+          `${import.meta.env.VITE_BACKEND_URL}/messages/${editingMessageId}`,
           {
             text: editingText,
           },
@@ -126,7 +132,7 @@ const ChatWindow = ({ activeChat }) => {
 
   const handleDeleteMessage = (message) => {
     axios
-      .delete(`${BACKEND_URL}/messages/${message._id}`, {
+      .delete(`${import.meta.env.VITE_BACKEND_URL}/messages/${message._id}`, {
         withCredentials: true,
       })
       .then(() => {

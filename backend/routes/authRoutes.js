@@ -13,7 +13,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: `${process.env.REACT_APP_BACKEND_URL}/auth/google/callback`,
+      callbackURL: "http://localhost:5001/auth/google/callback",
     },
     (accessToken, refreshToken, profile, done) => {
       console.log("Google profile:", profile);
@@ -53,7 +53,7 @@ router.get(
     failureRedirect: "/",
   }),
   (req, res) => {
-    res.redirect(`${process.env.CLIENT_URL}`);
+    res.redirect("http://localhost:5173/");
   }
 );
 
