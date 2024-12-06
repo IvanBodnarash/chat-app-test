@@ -5,7 +5,7 @@ import { io } from "socket.io-client";
 import "./ChatList.css";
 
 const BACKEND_URL = "https://chat-app-test-cllw.onrender.com";
-const socket = io(BACKEND_URL);
+const socket = io(BACKEND_URL, { transports: ["websocket"] });
 
 const ChatList = ({
   chats,

@@ -53,7 +53,7 @@ router.get(
     failureRedirect: "/",
   }),
   (req, res) => {
-    res.redirect("/");
+    res.redirect(`${process.env.CLIENT_URL}`);
   }
 );
 

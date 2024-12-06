@@ -9,7 +9,7 @@ import ChatSearch from "./components/ChatSearch";
 import Toast from "./components/Toast";
 
 const BACKEND_URL = "https://chat-app-test-cllw.onrender.com";
-const socket = io(BACKEND_URL);
+const socket = io(BACKEND_URL, { transports: ["websocket"] });
 
 console.log("BACKEND_URL:", BACKEND_URL);
 
@@ -87,7 +87,6 @@ const App = () => {
       socket.off("chatUpdated", handleChatUpdated);
     };
   }, [activeChat]);
-
 
   const toggleAutoMessages = () => {
     if (autoMessages) {
