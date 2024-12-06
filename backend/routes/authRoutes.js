@@ -13,7 +13,9 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:5001/auth/google/callback",
+      callbackURL: `${
+        process.env.VITE_APP_BACKEND_URL || "http://localhost:5001"
+      }/auth/google/callback`,
     },
     (accessToken, refreshToken, profile, done) => {
       console.log("Google profile:", profile);
@@ -53,7 +55,7 @@ router.get(
     failureRedirect: "/",
   }),
   (req, res) => {
-    res.redirect("http://localhost:5173/");
+    res.redirect(process.env.CLIENT_URL || "http://localhost:5173");
   }
 );
 
@@ -69,7 +71,7 @@ router.get("/profile", (req, res) => {
 // Route to logout
 router.get("/logout", (req, res) => {
   req.logout(() => {
-    res.redirect("/");
+    res.redirect(process.env.CLIENT_URL || "/");
   });
 });
 
