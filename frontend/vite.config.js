@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/socket.io": {
-        target: "http://localhost:5001",
+        target: "https://chat-app-test-cllw.onrender.com",
         ws: true,
       },
     },
