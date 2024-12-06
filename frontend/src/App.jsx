@@ -156,7 +156,7 @@ const App = () => {
                 </div>
               </>
             ) : (
-              <a href={`${BACKEND_URL}/auth/google`}>
+              <a href={`https://chat-app-test-cllw.onrender.com/auth/google`}>
                 <button className="google-login-button">
                   <img
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
