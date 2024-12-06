@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 
 import express from "express";
-import { createServer } from "https";
+import { createServer } from "http";
 import { Server } from "socket.io";
 import MongoStore from "connect-mongo";
 import session from "express-session";
@@ -19,8 +19,8 @@ import Message from "./models/Message.js";
 import { isAuthenticated } from "./middleware/authMiddleware.js";
 
 import fetch from "node-fetch";
-// import https from "https";
-// const agent = new https.Agent({ rejectUnauthorized: false });
+import https from "https";
+const agent = new https.Agent({ rejectUnauthorized: false });
 
 dotenv.config();
 
@@ -93,7 +93,9 @@ io.on("connection", (socket) => {
         const randomChat = chats[Math.floor(Math.random() * chats.length)];
 
         // Get random quote from Quotable
-        const quoteRsponse = await fetch("https://api.quotable.io/random");
+        const quoteRsponse = await fetch("https://api.quotable.io/random", {
+          agent,
+        });
         const quote = await quoteRsponse.json();
 
         const randomMessage = `Auto-generated message: "${quote.content}" - ${quote.author}`;
