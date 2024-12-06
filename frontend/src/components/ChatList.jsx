@@ -4,7 +4,7 @@ import { io } from "socket.io-client";
 
 import "./ChatList.css";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = "https://chat-app-test-cllw.onrender.com";
 const socket = io(BACKEND_URL);
 
 const ChatList = ({

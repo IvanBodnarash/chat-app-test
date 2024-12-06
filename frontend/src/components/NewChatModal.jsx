@@ -3,7 +3,7 @@ import axios from "axios";
 
 import "./NewChatModal.css";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = "https://chat-app-test-cllw.onrender.com";
 
 const NewChatModal = ({ closeModal, onChatCreated }) => {
   const [firstName, setFirstName] = useState("");
