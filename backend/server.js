@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 
 import express from "express";
-import { createServer } from "http";
+import { createServer } from "https";
 import { Server } from "socket.io";
 import MongoStore from "connect-mongo";
 import session from "express-session";
@@ -55,7 +55,7 @@ app.use(
     }),
     cookie: {
       secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
+      httpsOnly: true,
       sameSite: "strict",
       maxAge: 24 * 60 * 60 * 1000,
     },
