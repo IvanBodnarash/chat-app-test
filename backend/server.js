@@ -64,6 +64,12 @@ app.use("/auth", authRoutes);
 app.use("/chats", isAuthenticated, chatRoutes);
 app.use("/messages", isAuthenticated, messageRoutes(io));
 
+app.use((req, res, next) => {
+  console.log("Session ID:", req.sessionID);
+  console.log("Session Data:", req.session);
+  next();
+});
+
 app.get("/", (req, res) => {
   res.send("WebSocket server is running!");
 });
