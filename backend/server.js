@@ -42,7 +42,7 @@ const sessionStore = MongoStore.create({
 const sessionMiddleware = session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   store: sessionStore,
   cookie: {
     secure: process.env.NODE_ENV === "production",
@@ -91,7 +91,8 @@ io.use(
       accept(null, true);
     },
     fail: (data, message, error, accept) => {
-      console.error("WebSocket session failed:", message);
+      console.error("WebSocket session failed. Reason:", message);
+      console.error("Headers received:", data.headers);
       accept(null, false);
     },
   })
