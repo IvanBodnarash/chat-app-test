@@ -1,34 +1,52 @@
 import dotenv from "dotenv";
-
 import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import session from "express-session";
-
 import passport from "passport";
 import { connect } from "mongoose";
 import cors from "cors";
+import MongoStore from "connect-mongo";
+import cookieParser from "cookie-parser";
+import passportSocketIo from "passport.socketio";
 
 import chatRoutes from "./routes/chatRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 
+import { isAuthenticated } from "./middleware/authMiddleware.js";
 import Chat from "./models/Chat.js";
 import Message from "./models/Message.js";
-import { isAuthenticated } from "./middleware/authMiddleware.js";
-
 import fetch from "node-fetch";
 import https from "https";
+
 const agent = new https.Agent({ rejectUnauthorized: false });
 
 dotenv.config();
 
 const app = express();
-
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
     origin: process.env.CLIENT_URL || "http://localhost:5173",
+    methods: ["GET", "POST"],
+  },
+});
+
+// MongoDB session store
+const sessionStore = MongoStore.create({
+  mongoUrl: process.env.MONGODB_URI,
+});
+
+// Session middleware
+const sessionMiddleware = session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: sessionStore,
+  cookie: {
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "none",
   },
 });
 
@@ -43,20 +61,41 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      secure: true,
-      sameSite: "none",
-    },
-  })
-);
+// app.use(
+//   session({
+//     secret: process.env.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {
+//       secure: true,
+//       sameSite: "none",
+//     },
+//   })
+// );
+
+app.use(cookieParser());
+app.use(sessionMiddleware);
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Use session in WebSockets
+io.use(
+  passportSocketIo.authorize({
+    cookieParser: cookieParser,
+    key: "connect.sid",
+    secret: process.env.SESSION_SECRET,
+    store: sessionStore,
+    success: (data, accept) => {
+      console.log("WebSocket session established:", data);
+      accept(null, true);
+    },
+    fail: (data, message, error, accept) => {
+      console.error("WebSocket session failed:", message);
+      accept(null, false);
+    },
+  })
+);
 
 // Routes
 app.use("/auth", authRoutes);
