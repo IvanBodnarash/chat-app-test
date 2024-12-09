@@ -8,10 +8,15 @@ import ChatSearch from "./components/ChatSearch";
 
 import Toast from "./components/Toast";
 
-const socket = io(`${import.meta.env.VITE_BACKEND_URL}`, {
+const socket = io("wss://chat-app-test-cllw.onrender.com", {
   withCredentials: true,
   transports: ["websocket", "polling"],
 });
+
+// const socket = io(`${import.meta.env.VITE_BACKEND_URL}`, {
+//   withCredentials: true,
+//   transports: ["websocket", "polling"],
+// });
 
 const App = () => {
   const [activeChat, setActiveChat] = useState(null);
@@ -28,14 +33,18 @@ const App = () => {
   // Auth check
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/auth/profile`, { withCredentials: true })
+      .get(`${import.meta.env.VITE_BACKEND_URL}/auth/profile`, {
+        withCredentials: true,
+      })
       .then((res) => setUser(res.data))
       .catch((error) => console.error("Error fetching user:", error));
   }, []);
 
   const handleLogout = () => {
     axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`, { withCredentials: true })
+      .get(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`, {
+        withCredentials: true,
+      })
       .then(() => {
         setUser(null);
       })
@@ -49,7 +58,9 @@ const App = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/chats`, { withCredentials: true })
+      .get(`${import.meta.env.VITE_BACKEND_URL}/chats`, {
+        withCredentials: true,
+      })
       .then((res) => {
         setChats(res.data);
         setFilteredChats(res.data);
@@ -87,7 +98,6 @@ const App = () => {
       socket.off("chatUpdated", handleChatUpdated);
     };
   }, [activeChat]);
-
 
   const toggleAutoMessages = () => {
     if (autoMessages) {
