@@ -8,7 +8,7 @@ import ChatSearch from "./components/ChatSearch";
 
 import Toast from "./components/Toast";
 
-const socket = io("wss://chat-app-test-cllw.onrender.com", {
+const socket = io("https://chat-app-test-cllw.onrender.com", {
   withCredentials: true,
   transports: ["websocket", "polling"],
 });
