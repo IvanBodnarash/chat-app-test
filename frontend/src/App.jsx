@@ -9,7 +9,8 @@ import ChatSearch from "./components/ChatSearch";
 import Toast from "./components/Toast";
 
 const socket = io(`${import.meta.env.VITE_BACKEND_URL}`, {
-  transports: ["websocket"],
+  withCredentials: true,
+  transports: ["websocket", "polling"],
 });
 
 const App = () => {
