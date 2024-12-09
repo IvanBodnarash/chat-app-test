@@ -8,7 +8,9 @@ import ChatSearch from "./components/ChatSearch";
 
 import Toast from "./components/Toast";
 
-const socket = io(`${import.meta.env.VITE_BACKEND_URL}`);
+const socket = io(`${import.meta.env.VITE_BACKEND_URL}`, {
+  transports: ["websocket"],
+});
 
 const App = () => {
   const [activeChat, setActiveChat] = useState(null);
