@@ -39,6 +39,7 @@ passport.serializeUser((user, done) => {
 
 // Deserealization user from session
 passport.deserializeUser((user, done) => {
+  console.log("Deserializing user:", user);
   done(null, user);
 });
 
@@ -55,6 +56,7 @@ router.get(
     failureRedirect: "/",
   }),
   (req, res) => {
+    console.log("User authenticated:", req.user);
     res.redirect(process.env.CLIENT_URL || "http://localhost:5173");
   }
 );
