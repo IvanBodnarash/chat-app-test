@@ -29,7 +29,6 @@ const server = createServer(app);
 const io = new Server(server, {
   cors: {
     origin: process.env.CLIENT_URL || "http://localhost:5173",
-    methods: ["GET", "POST"],
   },
 });
 
@@ -50,8 +49,8 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: {
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: true,
+      sameSite: "none",
     },
   })
 );
@@ -76,6 +75,8 @@ app.get("/", (req, res) => {
 
 // Websocket logic
 io.on("connection", (socket) => {
+  console.log("New WebSocket connection");
+  console.log("Session ID:", socket.request.sessionID);
   // Start auto-generated messages
   socket.on("startAutoMessages", async () => {
     if (isAutoMessagesRunning) {
