@@ -40,7 +40,6 @@ let isAutoMessagesRunning = false;
 app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
-    // methods: ["GET", "POST"],
     credentials: true,
   })
 );
@@ -52,7 +51,7 @@ app.use(
     saveUninitialized: true,
     cookie: {
       secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     },
   })
 );

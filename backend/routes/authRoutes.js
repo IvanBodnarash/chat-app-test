@@ -14,7 +14,7 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: `${
-        process.env.VITE_APP_BACKEND_URL || "http://localhost:5001"
+        process.env.SERVER_URL || "https://chat-app-test-cllw.onrender.com"
       }/auth/google/callback`,
     },
     (accessToken, refreshToken, profile, done) => {
