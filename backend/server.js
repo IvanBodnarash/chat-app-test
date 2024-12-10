@@ -38,18 +38,6 @@ const sessionStore = MongoStore.create({
   mongoUrl: process.env.MONGODB_URI,
 });
 
-// Session middleware
-const sessionMiddleware = session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: true,
-  store: sessionStore,
-  cookie: {
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "none",
-  },
-});
-
 let autoMessageInterval = null;
 let isAutoMessagesRunning = false;
 
@@ -61,17 +49,22 @@ app.use(
   })
 );
 app.use(express.json());
-// app.use(
-//   session({
-//     secret: process.env.SESSION_SECRET,
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: {
-//       secure: true,
-//       sameSite: "none",
-//     },
-//   })
-// );
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+    }),
+  })
+);
 
 app.use(cookieParser());
 app.use(sessionMiddleware);
