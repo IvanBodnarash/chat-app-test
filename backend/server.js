@@ -24,6 +24,8 @@ const agent = new https.Agent({ rejectUnauthorized: false });
 
 dotenv.config();
 
+console.log("NODE_ENV:", process.env.NODE_ENV);
+
 const app = express();
 const server = createServer(app);
 const io = new Server(server, {
@@ -46,8 +48,10 @@ app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   })
-);
+);  
 app.use(express.json());
 app.use(
   session({
@@ -55,9 +59,9 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: {
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000,
     },
     store: MongoStore.create({
