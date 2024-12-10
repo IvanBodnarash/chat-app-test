@@ -64,6 +64,8 @@ router.get(
 // Route to get user profile
 router.get("/profile", (req, res) => {
   console.log("Session in /profile:", req.session);
+  console.log("Cookies in /profile:", req.cookies);
+  console.log("User in /profile:", req.user);
   if (req.isAuthenticated()) {
     res.json(req.user);
   } else {
