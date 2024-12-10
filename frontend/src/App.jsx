@@ -26,30 +26,30 @@ const App = () => {
   const [filteredChats, setFilteredChats] = useState([]);
   const [autoMessages, setAutoMessages] = useState(false);
 
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
 
   const [globalToast, setGlobalToast] = useState(null);
 
   // Auth check
-  useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/auth/profile`, {
-        withCredentials: true,
-      })
-      .then((res) => setUser(res.data))
-      .catch((error) => console.error("Error fetching user:", error));
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get(`${import.meta.env.VITE_BACKEND_URL}/auth/profile`, {
+  //       withCredentials: true,
+  //     })
+  //     .then((res) => setUser(res.data))
+  //     .catch((error) => console.error("Error fetching user:", error));
+  // }, []);
 
-  const handleLogout = () => {
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`, {
-        withCredentials: true,
-      })
-      .then(() => {
-        setUser(null);
-      })
-      .catch((error) => console.error("Error logging out:", error));
-  };
+  // const handleLogout = () => {
+  //   axios
+  //     .get(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`, {
+  //       withCredentials: true,
+  //     })
+  //     .then(() => {
+  //       setUser(null);
+  //     })
+  //     .catch((error) => console.error("Error logging out:", error));
+  // };
 
   const handleChatCreated = (newChat) => {
     setChats((prevChats) => [...prevChats, newChat]);
@@ -129,7 +129,7 @@ const App = () => {
       <div className="chat-sidebar">
         <div className="chat-sidebar-content">
           <header>
-            {user ? (
+            {/* {user ? (
               <>
                 <div className="main-header-container">
                   <div className="avatar">
@@ -171,7 +171,17 @@ const App = () => {
                   Login with Google
                 </button>
               </a>
-            )}
+            )} */}
+            <div className="header-search-auto-btn-container">
+              <ChatSearch onSearch={handleSearch} />
+              <button
+                onClick={toggleAutoMessages}
+                disabled={chats.length === 0}
+                className="auto-messages-button"
+              >
+                {autoMessages ? "Stop Auto Messages" : "Start Auto Messages"}
+              </button>
+            </div>
           </header>
           <div className="chat-list">
             <div className="chat-list-header">
@@ -179,7 +189,6 @@ const App = () => {
               <button
                 className="new-chat-button"
                 onClick={() => setIsModalOpen(true)}
-                disabled={!user}
               >
                 New Chat
               </button>

@@ -3,18 +3,18 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import session from "express-session";
-import passport from "passport";
+// import passport from "passport";
 import { connect } from "mongoose";
 import cors from "cors";
 import MongoStore from "connect-mongo";
 import cookieParser from "cookie-parser";
-import passportSocketIo from "passport.socketio";
+// import passportSocketIo from "passport.socketio";
 
 import chatRoutes from "./routes/chatRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
-import authRoutes from "./routes/authRoutes.js";
+// import authRoutes from "./routes/authRoutes.js";
 
-import { isAuthenticated } from "./middleware/authMiddleware.js";
+// import { isAuthenticated } from "./middleware/authMiddleware.js";
 import Chat from "./models/Chat.js";
 import Message from "./models/Message.js";
 import fetch from "node-fetch";
@@ -36,9 +36,9 @@ const io = new Server(server, {
 });
 
 // MongoDB session store
-const sessionStore = MongoStore.create({
-  mongoUrl: process.env.MONGODB_URI,
-});
+// const sessionStore = MongoStore.create({
+//   mongoUrl: process.env.MONGODB_URI,
+// });
 
 let autoMessageInterval = null;
 let isAutoMessagesRunning = false;
@@ -72,40 +72,40 @@ app.use(
 
 app.use(cookieParser());
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // Use session in WebSockets
-io.use(
-  passportSocketIo.authorize({
-    cookieParser: cookieParser,
-    key: "connect.sid",
-    secret: process.env.SESSION_SECRET,
-    store: sessionStore,
-    success: (data, accept) => {
-      console.log("WebSocket session established:", data);
-      accept(null, true);
-    },
-    fail: (data, message, error, accept) => {
-      console.error("WebSocket session failed. Reason:", message);
-      console.error("Headers received:", data.headers);
-      accept(null, false);
-    },
-  })
-);
+// io.use(
+//   passportSocketIo.authorize({
+//     cookieParser: cookieParser,
+//     key: "connect.sid",
+//     secret: process.env.SESSION_SECRET,
+//     store: sessionStore,
+//     success: (data, accept) => {
+//       console.log("WebSocket session established:", data);
+//       accept(null, true);
+//     },
+//     fail: (data, message, error, accept) => {
+//       console.error("WebSocket session failed. Reason:", message);
+//       console.error("Headers received:", data.headers);
+//       accept(null, false);
+//     },
+//   })
+// );
 
 // Routes
-app.use("/auth", authRoutes);
-app.use("/chats", isAuthenticated, chatRoutes);
-app.use("/messages", isAuthenticated, messageRoutes(io));
+// app.use("/auth", authRoutes);
+app.use("/chats", chatRoutes);
+app.use("/messages", messageRoutes(io));
 
-app.use((req, res, next) => {
-  console.log("Session ID:", req.sessionID);
-  console.log("Session Data:", req.session);
-  console.log("Session in middleware:", req.session);
-  console.log("User in middleware:", req.user);
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log("Session ID:", req.sessionID);
+//   console.log("Session Data:", req.session);
+//   console.log("Session in middleware:", req.session);
+//   console.log("User in middleware:", req.user);
+//   next();
+// });
 
 app.get("/", (req, res) => {
   res.send("WebSocket server is running!");
@@ -113,8 +113,8 @@ app.get("/", (req, res) => {
 
 // Websocket logic
 io.on("connection", (socket) => {
-  console.log("New WebSocket connection");
-  console.log("Session ID:", socket.request.sessionID);
+  // console.log("New WebSocket connection");
+  // console.log("Session ID:", socket.request.sessionID);
   // Start auto-generated messages
   socket.on("startAutoMessages", async () => {
     if (isAutoMessagesRunning) {
