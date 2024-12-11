@@ -27,10 +27,7 @@ const ChatWindow = ({ activeChat }) => {
         .get(
           `${import.meta.env.VITE_BACKEND_URL}/messages?chatId=${
             activeChat._id
-          }`,
-          {
-            withCredentials: true,
-          }
+          }`
         )
         .then((res) => {
           setMessages((prevMessages) => ({
@@ -93,14 +90,10 @@ const ChatWindow = ({ activeChat }) => {
     if (!text.trim()) return;
 
     axios
-      .post(
-        `${import.meta.env.VITE_BACKEND_URL}/messages`,
-        {
-          chatId: activeChat._id,
-          text,
-        },
-        { withCredentials: true }
-      )
+      .post(`${import.meta.env.VITE_BACKEND_URL}/messages`, {
+        chatId: activeChat._id,
+        text,
+      })
       .catch((err) => console.log("Error sending message", err));
 
     setText("");
@@ -119,8 +112,7 @@ const ChatWindow = ({ activeChat }) => {
           `${import.meta.env.VITE_BACKEND_URL}/messages/${editingMessageId}`,
           {
             text: editingText,
-          },
-          { withCredentials: true }
+          }
         )
         .then(() => {
           setEditingMessageId(null);
@@ -132,9 +124,7 @@ const ChatWindow = ({ activeChat }) => {
 
   const handleDeleteMessage = (message) => {
     axios
-      .delete(`${import.meta.env.VITE_BACKEND_URL}/messages/${message._id}`, {
-        withCredentials: true,
-      })
+      .delete(`${import.meta.env.VITE_BACKEND_URL}/messages/${message._id}`)
       .then(() => {
         setMessages((prevMessages) => {
           const chatMessages = prevMessages[message.chatId] || [];

@@ -1,55 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import axios from "axios";
+
 import ChatList from "./components/ChatList";
 import ChatWindow from "./components/ChatWindow";
 import NewChatModal from "./components/NewChatModal";
 import ChatSearch from "./components/ChatSearch";
-
 import Toast from "./components/Toast";
 
-const socket = io("https://chat-app-test-cllw.onrender.com", {
-  withCredentials: true,
-  transports: ["websocket", "polling"],
+const socket = io(`${import.meta.env.VITE_BACKEND_URL}`, {
+  transports: ["websocket"],
 });
-
-// const socket = io(`${import.meta.env.VITE_BACKEND_URL}`, {
-//   withCredentials: true,
-//   transports: ["websocket", "polling"],
-// });
 
 const App = () => {
   const [activeChat, setActiveChat] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [chats, setChats] = useState([]);
   const [filteredChats, setFilteredChats] = useState([]);
   const [autoMessages, setAutoMessages] = useState(false);
-
-  // const [user, setUser] = useState(null);
-
   const [globalToast, setGlobalToast] = useState(null);
-
-  // Auth check
-  // useEffect(() => {
-  //   axios
-  //     .get(`${import.meta.env.VITE_BACKEND_URL}/auth/profile`, {
-  //       withCredentials: true,
-  //     })
-  //     .then((res) => setUser(res.data))
-  //     .catch((error) => console.error("Error fetching user:", error));
-  // }, []);
-
-  // const handleLogout = () => {
-  //   axios
-  //     .get(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`, {
-  //       withCredentials: true,
-  //     })
-  //     .then(() => {
-  //       setUser(null);
-  //     })
-  //     .catch((error) => console.error("Error logging out:", error));
-  // };
 
   const handleChatCreated = (newChat) => {
     setChats((prevChats) => [...prevChats, newChat]);
@@ -58,9 +27,7 @@ const App = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/chats`, {
-        withCredentials: true,
-      })
+      .get(`${import.meta.env.VITE_BACKEND_URL}/chats`)
       .then((res) => {
         setChats(res.data);
         setFilteredChats(res.data);
@@ -129,49 +96,6 @@ const App = () => {
       <div className="chat-sidebar">
         <div className="chat-sidebar-content">
           <header>
-            {/* {user ? (
-              <>
-                <div className="main-header-container">
-                  <div className="avatar">
-                    <img
-                      src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png"
-                      alt={user.displayName}
-                    />
-                  </div>
-                  <div className="inner-header-container">
-                    <p>Welcome, {user.displayName}</p>
-                    <button
-                      className="google-logout-button"
-                      onClick={handleLogout}
-                    >
-                      Logout
-                    </button>
-                  </div>
-                </div>
-                <div className="header-search-auto-btn-container">
-                  <ChatSearch onSearch={handleSearch} />
-                  <button
-                    onClick={toggleAutoMessages}
-                    disabled={chats.length === 0}
-                    className="auto-messages-button"
-                  >
-                    {autoMessages
-                      ? "Stop Auto Messages"
-                      : "Start Auto Messages"}
-                  </button>
-                </div>
-              </>
-            ) : (
-              <a href={`${import.meta.env.VITE_BACKEND_URL}/auth/google`}>
-                <button className="google-login-button">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
-                    alt="Google logo"
-                  />
-                  Login with Google
-                </button>
-              </a>
-            )} */}
             <div className="header-search-auto-btn-container">
               <ChatSearch onSearch={handleSearch} />
               <button
