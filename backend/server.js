@@ -7,14 +7,14 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 import fetch from "node-fetch";
-// import https from "https";
+import https from "https";
 import chatRoutes from "./routes/chatRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 
 import Chat from "./models/Chat.js";
 import Message from "./models/Message.js";
 
-// const agent = new https.Agent({ rejectUnauthorized: false });
+const agent = new https.Agent({ rejectUnauthorized: false });
 
 dotenv.config();
 
@@ -71,7 +71,9 @@ io.on("connection", (socket) => {
         const randomChat = chats[Math.floor(Math.random() * chats.length)];
 
         // Get random quote from Quotable
-        const quoteRsponse = await fetch("https://api.quotable.io/random");
+        const quoteRsponse = await fetch("https://api.quotable.io/random", {
+          agent,
+        });
         const quote = await quoteRsponse.json();
 
         const randomMessage = `Auto-generated message: "${quote.content}" - ${quote.author}`;
