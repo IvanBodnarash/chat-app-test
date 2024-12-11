@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import axios from "axios";
-
 import ChatList from "./components/ChatList";
 import ChatWindow from "./components/ChatWindow";
 import NewChatModal from "./components/NewChatModal";
 import ChatSearch from "./components/ChatSearch";
+
 import Toast from "./components/Toast";
 
 const socket = io(`${import.meta.env.VITE_BACKEND_URL}`, {
+  withCredentials: true,
   transports: ["websocket"],
 });
 

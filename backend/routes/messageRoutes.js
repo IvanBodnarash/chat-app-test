@@ -3,6 +3,10 @@ import Message from "../models/Message.js";
 import Chat from "../models/Chat.js";
 import fetch from "node-fetch";
 
+// Temporary agent for ignoring SSL
+import https from "https";
+const agent = new https.Agent({ rejectUnauthorized: false });
+
 const router = Router();
 
 export default (io) => {
@@ -37,7 +41,9 @@ export default (io) => {
       res.status(201).json(userMessage);
 
       // Get random quote from Quotable
-      const quoteRsponse = await fetch("https://api.quotable.io/random");
+      const quoteRsponse = await fetch("https://api.quotable.io/random", {
+        agent,
+      });
       const quote = await quoteRsponse.json();
 
       // Get chat details

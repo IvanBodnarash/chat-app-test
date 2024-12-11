@@ -22,10 +22,11 @@ const NewChatModal = ({ closeModal, onChatCreated }) => {
     if (!firstName.trim() || !lastName.trim()) return;
 
     axios
-      .post(`${import.meta.env.VITE_BACKEND_URL}/chats`, {
-        firstName,
-        lastName,
-      })
+      .post(
+        `${import.meta.env.VITE_BACKEND_URL}/chats`,
+        { firstName, lastName },
+        { withCredentials: true }
+      )
       .then((res) => {
         console.log("Chat created:", res.data);
         onChatCreated(res.data);

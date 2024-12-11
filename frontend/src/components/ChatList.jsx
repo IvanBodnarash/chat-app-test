@@ -5,6 +5,7 @@ import { io } from "socket.io-client";
 import "./ChatList.css";
 
 const socket = io(`${import.meta.env.VITE_BACKEND_URL}`, {
+  withCredentials: true,
   transports: ["websocket"],
 });
 
@@ -21,7 +22,9 @@ const ChatList = ({
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/chats`)
+      .get(`${import.meta.env.VITE_BACKEND_URL}/chats`, {
+        withCredentials: true,
+      })
       .then((res) => setChats(res.data))
       .catch((err) => console.log("Error fetching chats", err));
 
@@ -73,10 +76,14 @@ const ChatList = ({
 
   const handleUpdate = () => {
     axios
-      .put(`${import.meta.env.VITE_BACKEND_URL}/chats/${editingChat}`, {
-        firstName: editFirstName,
-        lastName: editLastName,
-      })
+      .put(
+        `${import.meta.env.VITE_BACKEND_URL}/chats/${editingChat}`,
+        {
+          firstName: editFirstName,
+          lastName: editLastName,
+        },
+        { withCredentials: true }
+      )
       .then((res) => {
         setChats((prevChats) =>
           prevChats.map((chat) =>
@@ -106,7 +113,9 @@ const ChatList = ({
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this chat?")) {
       axios
-        .delete(`${import.meta.env.VITE_BACKEND_URL}/chats/${id}`)
+        .delete(`${import.meta.env.VITE_BACKEND_URL}/chats/${id}`, {
+          withCredentials: true,
+        })
         .then(() => {
           setChats((prevChats) => prevChats.filter((chat) => chat._id !== id));
           setFilteredChats((prevChats) =>
