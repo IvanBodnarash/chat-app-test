@@ -1,4 +1,8 @@
-# Chat Application
+# Chat App (Full Stack)
+
+<p align="center">
+  <img src="./frontend/public/screenshots/chat_showcase.png" alt="Project Screenshot" width="600"/>
+</p>
 
 ## About
 This is a lightweight chat application that allows users to create and manage chats, send messages, and receive random quotes as bot responses. The app includes features like auto-messages that send random quotes to random chats every 5 seconds and toast notifications. The frontend is deployed on Vercel, and the backend is hosted on Render.
