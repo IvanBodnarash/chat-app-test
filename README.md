@@ -1,7 +1,7 @@
 # Chat App (Full Stack)
 
 <p align="center">
-  <img src="./frontend/public/screenshots/chat_showcase.png" alt="Project Screenshot" width="600"/>
+  <img src="./frontend/public/screenshot.png" alt="Project Screenshot" width="600"/>
 </p>
 
 ## About
